@@ -1,8 +1,6 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -12,7 +10,7 @@ public class ApplicationManager {
     public WebDriver driver;
 
     private SessionHelper sessionHelper;
-    private  NavigationHelper navigationHelper;
+    private NavigationHelper navigationHelper;
     private GroupHelper groupHelper;
 
     public void init() {
@@ -26,29 +24,11 @@ public class ApplicationManager {
     }
 
     public void logout() {
-      driver.findElement(By.linkText("Logout")).click();
+        driver.findElement(By.linkText("Logout")).click();
     }
 
     public void stop() {
         driver.quit();
-    }
-
-    public boolean isElementPresent(By by) {
-      try {
-        driver.findElement(by);
-        return true;
-      } catch (NoSuchElementException e) {
-        return false;
-      }
-    }
-
-    public boolean isAlertPresent() {
-      try {
-        driver.switchTo().alert();
-        return true;
-      } catch (NoAlertPresentException e) {
-        return false;
-      }
     }
 
     public GroupHelper getGroupHelper() {
