@@ -31,6 +31,9 @@ public class ContactHelper extends HelperBase{
 
     public void initContactModification() { click(By.xpath("//img[@alt='Edit']")); }
 
-    public void submitContactModification() { click(By.xpath("//div[@id='content']/form/input[22]"));
-    }
+    public void submitContactModification() { click(By.xpath("//div[@id='content']/form/input[22]")); }
+
+    public void submitContactDeletion() { click(By.xpath("//input[@value='Delete']"));}
+
+    public void acceptDialogBox() { driver.switchTo().alert().accept();}
 }
