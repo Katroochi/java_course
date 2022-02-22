@@ -2,9 +2,13 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ContactHelper extends HelperBase{
 
@@ -23,10 +27,13 @@ public class ContactHelper extends HelperBase{
         type(By.name("address"), contactData.getAddress());
         type(By.name("mobile"), contactData.getMobile());
         type(By.name("email"), contactData.getEmail());
-        if (isElementPresent(By.name("new group"))){
-            new Select(driver.findElement(By.name("new group"))).selectByVisibleText(contactData.getGroup());
+        type(By.name("address2"), contactData.getAddress());
+        List<WebElement> groups = new Select (driver.findElement(By.name("new_group"))).getOptions();
+        if (isElementPresent(By.name("new_group"))){
+            if(groups.size()>1){
+                new Select (driver.findElement(By.name("new_group"))).selectByIndex(1); }
         } else {
-            Assert.assertFalse(isElementPresent(By.name("new group")));
+            Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
     }
 
@@ -48,7 +55,7 @@ public class ContactHelper extends HelperBase{
         return isElementPresent(By.name("selected[]"));
     }
 
-    public void createNewContact(ContactData contact,boolean creation) {
+    public void createNewContact(ContactData contact) {
         initContactCreation();
         fillContactForm(contact, true);
         submitContactCreation();
