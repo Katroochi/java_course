@@ -10,7 +10,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import java.util.Collections;
 import java.util.List;
 
-public class ContactHelper extends HelperBase{
+public class ContactHelper extends HelperBase {
 
     public ContactHelper(WebDriver driver) {
         super(driver);
@@ -28,10 +28,11 @@ public class ContactHelper extends HelperBase{
         type(By.name("mobile"), contactData.getMobile());
         type(By.name("email"), contactData.getEmail());
         type(By.name("address2"), contactData.getAddress());
-        List<WebElement> groups = new Select (driver.findElement(By.name("new_group"))).getOptions();
-        if (isElementPresent(By.name("new_group"))){
-            if(groups.size()>1){
-                new Select (driver.findElement(By.name("new_group"))).selectByIndex(1); }
+        if (creation) {
+            List<WebElement> groups = new Select(driver.findElement(By.name("new_group"))).getOptions();
+            if (groups.size() > 1) {
+                new Select(driver.findElement(By.name("new_group"))).selectByIndex(1);
+            }
         } else {
             Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
@@ -41,15 +42,25 @@ public class ContactHelper extends HelperBase{
         click(By.linkText("add new"));
     }
 
-    public void selectContact() { click(By.name("selected[]")); }
+    public void selectContact() {
+        click(By.name("selected[]"));
+    }
 
-    public void initContactModification() { click(By.xpath("//img[@alt='Edit']")); }
+    public void initContactModification() {
+        click(By.xpath("//img[@alt='Edit']"));
+    }
 
-    public void submitContactModification() { click(By.xpath("//div[@id='content']/form/input[22]")); }
+    public void submitContactModification() {
+        click(By.xpath("//div[@id='content']/form/input[22]"));
+    }
 
-    public void submitContactDeletion() { click(By.xpath("//input[@value='Delete']"));}
+    public void submitContactDeletion() {
+        click(By.xpath("//input[@value='Delete']"));
+    }
 
-    public void acceptDialogBox() { driver.switchTo().alert().accept();}
+    public void acceptDialogBox() {
+        driver.switchTo().alert().accept();
+    }
 
     public boolean isThereAContact() {
         return isElementPresent(By.name("selected[]"));
