@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactHelper extends HelperBase {
@@ -22,7 +22,7 @@ public class ContactHelper extends HelperBase {
 
     public void fillContactForm(ContactData contactData, boolean creation) {
         type(By.name("firstname"), contactData.getFirstname());
-        type(By.name("middlename"), contactData.getMiddlename());
+        type(By.name("lastname"), contactData.getLastname());
         type(By.name("nickname"), contactData.getNickname());
         type(By.name("address"), contactData.getAddress());
         type(By.name("mobile"), contactData.getMobile());
@@ -42,12 +42,12 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void selectContact() {
-        click(By.name("selected[]"));
+    public void selectContact(int index) {
+        driver.findElements(By.name("selected[]")).get(index).click();
     }
 
-    public void initContactModification() {
-        click(By.xpath("//img[@alt='Edit']"));
+    public void initContactModification(int contactId) {
+        click(By.xpath("//a[@href = 'edit.php?id=" + contactId+ "']"));
     }
 
     public void submitContactModification() {
@@ -70,5 +70,19 @@ public class ContactHelper extends HelperBase {
         initContactCreation();
         fillContactForm(contact, true);
         submitContactCreation();
+    }
+
+    public List<ContactData> getContactList() {
+        List<ContactData> contacts = new ArrayList<>();
+        List<WebElement> elements = driver.findElements(By.name("entry"));
+        for (WebElement element : elements){
+            List<WebElement> cells = element.findElements(By.tagName("td"));
+            int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value"));
+            String lastname = cells.get(1).getText();
+            String firstname = cells.get(2).getText();
+            ContactData contact = new ContactData(id, firstname, lastname, null, null, null, null, null);
+            contacts.add(contact);
+        }
+        return contacts;
     }
 }

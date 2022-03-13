@@ -24,7 +24,7 @@ public class GroupCreationTests extends TestBase{
     Comparator<? super GroupData> byId = Comparator.comparingInt(GroupData::getId);
     before.sort(byId);
     after.sort(byId);
-    Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
+    Assert.assertEquals(before, after);
   }
 
 }
