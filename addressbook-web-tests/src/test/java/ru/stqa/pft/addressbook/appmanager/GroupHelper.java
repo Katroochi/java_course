@@ -45,10 +45,23 @@ public class GroupHelper extends HelperBase{
     public void submitGroupModification() { click(By.name("update"));
     }
 
-    public void createNewGroup(GroupData group) {
+    public void create(GroupData group) {
         initGroupCreation();
         fillGroupForm(group);
         submitGroupCreation();
+        returnToGroupPage();
+    }
+    public void modify(int index, GroupData group) {
+        selectGroup(index);
+        initGroupModification();
+        fillGroupForm(group);
+        submitGroupModification();
+        returnToGroupPage();
+    }
+
+    public void delete(int index) {
+        selectGroup(index);
+        deleteSelectedGroups();
         returnToGroupPage();
     }
 
@@ -60,14 +73,13 @@ public class GroupHelper extends HelperBase{
         return driver.findElements(By.name("selected[]")).size();
     }
 
-    public List<GroupData> getGroupList() {
+    public List<GroupData> list() {
         List<GroupData> groups = new ArrayList<>();
         List<WebElement> elements = driver.findElements(By.cssSelector("span.group"));
         for (WebElement element : elements){
             String name = element.getText();
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-            GroupData group = new GroupData(id, name, null, null);
-            groups.add(group);
+            groups.add(new GroupData().whithId(id).whithName(name));
         }
         return groups;
     }
