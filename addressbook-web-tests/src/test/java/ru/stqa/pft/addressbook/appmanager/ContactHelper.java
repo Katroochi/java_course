@@ -6,9 +6,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -42,12 +44,12 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void selectContact(int index) {
-        driver.findElements(By.name("selected[]")).get(index).click();
+    public void selectContactById(int id) {
+        driver.findElement(By.cssSelector("input[value = '" + id + "']"));
     }
 
-    public void initContactModification(int contactId) {
-        click(By.xpath("//a[@href = 'edit.php?id=" + contactId+ "']"));
+    public void initContactModification(int id) {
+        click(By.xpath("//a[@href = 'edit.php?id=" + id + "']"));
     }
 
     public void submitContactModification() {
@@ -66,22 +68,36 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.name("selected[]"));
     }
 
-    public void createNewContact(ContactData contact) {
+    public void create(ContactData contact) {
         initContactCreation();
         fillContactForm(contact, true);
         submitContactCreation();
     }
 
-    public List<ContactData> getContactList() {
-        List<ContactData> contacts = new ArrayList<>();
+    public void delete(ContactData contact) {
+        selectContactById(contact.getId());
+        submitContactDeletion();
+        acceptDialogBox();
+    }
+
+    public void modify(ContactData modifiedContact, ContactData contact) {
+        selectContactById(contact.getId());
+        initContactModification(modifiedContact.getId());
+        fillContactForm(contact, false);
+        submitContactModification();
+    }
+
+    public Contacts all() {
+        Contacts contacts = new Contacts();
         List<WebElement> elements = driver.findElements(By.name("entry"));
         for (WebElement element : elements){
             List<WebElement> cells = element.findElements(By.tagName("td"));
             int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value"));
             String lastname = cells.get(1).getText();
             String firstname = cells.get(2).getText();
-            ContactData contact = new ContactData(id, firstname, lastname, null, null, null, null, null);
-            contacts.add(contact);
+            contacts.add(new ContactData().whithId(id)
+                    .whithFirstname(firstname)
+                    .whithLastname(lastname));
         }
         return contacts;
     }
