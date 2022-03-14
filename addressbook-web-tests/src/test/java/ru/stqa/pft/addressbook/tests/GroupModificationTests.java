@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.hamcrest.CoreMatchers;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -30,8 +31,8 @@ public class GroupModificationTests extends TestBase{
                 .whithHeader( "test group3")
                 .whithFooter( "test group3");
         app.group().modify(group);
+        assertThat(app.group().count(), equalTo(before.size()));
         Groups after = app.group().all();
-        assertThat(after.size(),equalTo(before.size()));
 
         assertThat(after, equalTo(before
                 .whithout(modifiedGroup)
