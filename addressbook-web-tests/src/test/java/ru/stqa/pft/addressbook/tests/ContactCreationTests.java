@@ -23,7 +23,8 @@ public class ContactCreationTests extends TestBase{
             .withHomePhone("8-(63)")
             .withWorkPhone("8-999 45-63")
             .withEmail("test3@test.digital")
-            .withGroup("1");
+            .withEmail2("test2@email.com")
+            .withEmail3("test3@email.com");
     app.contact().create(contact);
     app.goTo().homePage();
     assertThat(app.contact().count(), equalTo(before.size() + 1));
