@@ -29,8 +29,8 @@ public class ContactModificationTests extends TestBase{
                 .withLastname("Testing1433");
         app.contact().modify(modifiedContact, contact);
         app.goTo().homePage();
+        assertThat(app.contact().count(), equalTo(before.size()));
         Contacts after = app.contact().all();
-        assertThat(after.size(), equalTo(before.size()));
 
         assertThat(after, equalTo(before
                 .whithout(modifiedContact)

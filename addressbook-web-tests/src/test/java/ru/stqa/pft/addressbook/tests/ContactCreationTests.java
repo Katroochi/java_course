@@ -17,17 +17,17 @@ public class ContactCreationTests extends TestBase{
             .withFirstname("Test43")
             .withLastname("Testing3")
             .withNickname("Test13")
-            .withAddress("Saint-Petersburg")
+            .withAddress("Saint-Petersburg, str. Morskaia, d.7, lit.A, fl.7")
+            .withAddressSecondary("12345 Siverskii, 123 Divizii, 4-43")
             .withMobilePhone("8-999-123-45-63")
-            .withHomePhone("8-63")
+            .withHomePhone("8-(63)")
             .withWorkPhone("8-999 45-63")
             .withEmail("test3@test.digital")
             .withGroup("1");
     app.contact().create(contact);
     app.goTo().homePage();
+    assertThat(app.contact().count(), equalTo(before.size() + 1));
     Contacts after = app.contact().all();
-    assertThat(after.size(),equalTo(before.size() + 1));
-
     assertThat(after, equalTo(before
             .whithAdded(contact
                     .withId(after.stream().mapToInt((g)-> g.getId())
