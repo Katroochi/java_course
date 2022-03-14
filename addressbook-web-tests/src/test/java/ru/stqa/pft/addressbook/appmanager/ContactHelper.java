@@ -8,9 +8,7 @@ import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -27,7 +25,9 @@ public class ContactHelper extends HelperBase {
         type(By.name("lastname"), contactData.getLastname());
         type(By.name("nickname"), contactData.getNickname());
         type(By.name("address"), contactData.getAddress());
-        type(By.name("mobile"), contactData.getMobile());
+        type(By.name("mobile"), contactData.getMobilePhone());
+        type(By.name("home"), contactData.getHomePhone());
+        type(By.name("work"), contactData.getWorkPhone());
         type(By.name("email"), contactData.getEmail());
         type(By.name("address2"), contactData.getAddress());
         if (creation) {
@@ -48,7 +48,7 @@ public class ContactHelper extends HelperBase {
         driver.findElement(By.cssSelector("input[value = '" + id + "']"));
     }
 
-    public void initContactModification(int id) {
+    public void initContactModificationById(int id) {
         click(By.xpath("//a[@href = 'edit.php?id=" + id + "']"));
     }
 
@@ -68,6 +68,18 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.name("selected[]"));
     }
 
+    public ContactData infoFromEditForm(ContactData contact) {
+        initContactModificationById(contact.getId());
+        String firstname = driver.findElement(By.name("firstname")).getAttribute("value");
+        String lastname = driver.findElement(By.name("lastname")).getAttribute("value");
+        String home = driver.findElement(By.name("home")).getAttribute("value");
+        String mobile = driver.findElement(By.name("mobile")).getAttribute("value");
+        String work = driver.findElement(By.name("work")).getAttribute("value");
+        driver.navigate().back();
+        return new ContactData().withId(contact.getId()).withFirstname(firstname).withLastname(lastname)
+                .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work);
+    }
+
     public void create(ContactData contact) {
         initContactCreation();
         fillContactForm(contact, true);
@@ -82,7 +94,7 @@ public class ContactHelper extends HelperBase {
 
     public void modify(ContactData modifiedContact, ContactData contact) {
         selectContactById(contact.getId());
-        initContactModification(modifiedContact.getId());
+        initContactModificationById(modifiedContact.getId());
         fillContactForm(contact, false);
         submitContactModification();
     }
@@ -95,9 +107,11 @@ public class ContactHelper extends HelperBase {
             int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value"));
             String lastname = cells.get(1).getText();
             String firstname = cells.get(2).getText();
-            contacts.add(new ContactData().whithId(id)
-                    .whithFirstname(firstname)
-                    .whithLastname(lastname));
+            String allPhones = cells.get(5).getText();
+            contacts.add(new ContactData().withId(id)
+                    .withFirstname(firstname)
+                    .withLastname(lastname)
+                    .withAllPhones(allPhones));
         }
         return contacts;
     }

@@ -14,13 +14,15 @@ public class ContactCreationTests extends TestBase{
     app.goTo().homePage();
     Contacts before = app.contact().all();
     ContactData contact = new ContactData()
-            .whithFirstname("Test43")
-            .whithLastname("Testing3")
-            .whithNickname("Test13")
-            .whithAddress("Saint-Petersburg")
-            .whithMobile("8-999-123-45-63")
-            .whithEmail("test3@test.digital")
-            .whithGroup("1");
+            .withFirstname("Test43")
+            .withLastname("Testing3")
+            .withNickname("Test13")
+            .withAddress("Saint-Petersburg")
+            .withMobilePhone("8-999-123-45-63")
+            .withHomePhone("8-63")
+            .withWorkPhone("8-999 45-63")
+            .withEmail("test3@test.digital")
+            .withGroup("1");
     app.contact().create(contact);
     app.goTo().homePage();
     Contacts after = app.contact().all();
@@ -28,7 +30,7 @@ public class ContactCreationTests extends TestBase{
 
     assertThat(after, equalTo(before
             .whithAdded(contact
-                    .whithId(after.stream().mapToInt((g)-> g.getId())
+                    .withId(after.stream().mapToInt((g)-> g.getId())
                             .max()
                             .getAsInt()))));
 
