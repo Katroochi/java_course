@@ -6,6 +6,7 @@ import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,7 +45,7 @@ public class ContactCreationTests extends TestBase{
     assertThat(app.contact().count(), equalTo(before.size() + 1));
     Contacts after = app.db().contacts();
     assertThat(after, equalTo(before
-            .whithAdded(contact
+            .withAdded(contact
                     .withId(after.stream().mapToInt((g)-> g.getId())
                             .max()
                             .getAsInt()))));
@@ -52,4 +53,28 @@ public class ContactCreationTests extends TestBase{
     //app.goTo().logout();
   }
 
+  @Test
+  public void testContactCreationWithGroup() {
+    if(app.db().groups().size() == 0){
+      app.goTo().groupPage();
+      app.group().create(new GroupData().whithName("test2"));
+    }
+
+    Groups groups = app.db().groups();
+    ContactData contact = new ContactData()
+            .withFirstname("Test1343")
+            .withLastname("Testing1433")
+            .inGroup(groups.iterator().next());
+    app.goTo().homePage();
+    Contacts before = app.db().contacts();
+    app.contact().create(contact);
+    app.goTo().homePage();
+    assertThat(app.contact().count(), equalTo(before.size() + 1));
+    Contacts after = app.db().contacts();
+    assertThat(after, equalTo(before
+            .withAdded(contact
+                    .withId(after.stream().mapToInt((g)-> g.getId())
+                            .max()
+                            .getAsInt()))));
+  }
 }

@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
@@ -33,10 +34,14 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmail());
         type(By.name("address2"), contactData.getAddress());
         if (creation) {
-            List<WebElement> groups = new Select(driver.findElement(By.name("new_group"))).getOptions();
-            if (groups.size() > 1) {
-                new Select(driver.findElement(By.name("new_group"))).selectByIndex(1);
+            if (contactData.getGroups().size() > 0 ){
+                Assert.assertTrue(contactData.getGroups().size() == 1);
+                new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
             }
+//            List<WebElement> groups = new Select(driver.findElement(By.name("new_group"))).getOptions();
+//            if (groups.size() > 1) {
+//                new Select(driver.findElement(By.name("new_group"))).selectByIndex(1);
+//            }
         } else {
             Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
@@ -48,6 +53,10 @@ public class ContactHelper extends HelperBase {
 
     public void selectContactById(int id) {
         driver.findElement(By.cssSelector("input[value = '" + id + "']"));
+    }
+
+    public void clickSelectContactById(int id) {
+        click(By.cssSelector("input[value = '" + id + "']"));
     }
 
     public void initContactModificationById(int id) {
@@ -72,6 +81,24 @@ public class ContactHelper extends HelperBase {
 
     public boolean isThereAContact() {
         return isElementPresent(By.name("selected[]"));
+    }
+
+    public void goToContactGroups(GroupData group){new Select(driver.findElement(By.xpath("//select[@name='group']"))).selectByValue(String.valueOf(group.getId()));}
+
+    public void submitRemoveContactFromGroup(){click(By.xpath("//input[@name='remove']"));}
+
+    public void addContactInGroup(ContactData contact, GroupData group) {
+        clickSelectContactById(contact.getId());
+        selectGroupForAdd(group);
+        addToGroup();
+    }
+
+    public void selectGroupForAdd(GroupData group) {
+        new Select(driver.findElement(By.xpath("//select[@name='to_group']"))).selectByValue(String.valueOf(group.getId()));
+    }
+
+    public void addToGroup() {
+        click(By.xpath("//input[@value='Add to']"));
     }
 
     public ContactData infoFromEditForm(ContactData contact) {

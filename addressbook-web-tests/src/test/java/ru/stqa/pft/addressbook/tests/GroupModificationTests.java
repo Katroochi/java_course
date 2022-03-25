@@ -38,6 +38,8 @@ public class GroupModificationTests extends TestBase{
                 .whithout(modifiedGroup)
                 .whithAdded(group)));
         //app.goTo().logout();
+
+        verifyGroupListInUI();
     }
 
 }
