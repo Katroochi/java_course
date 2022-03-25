@@ -30,6 +30,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("address2"), contactData.getAddressSecondary());
         type(By.name("mobile"), contactData.getMobilePhone());
         type(By.name("home"), contactData.getHomePhone());
+        type(By.name("phone2"), contactData.getHomePhone2());
         type(By.name("work"), contactData.getWorkPhone());
         type(By.name("email"), contactData.getEmail());
         type(By.name("address2"), contactData.getAddress());
@@ -38,10 +39,6 @@ public class ContactHelper extends HelperBase {
                 Assert.assertTrue(contactData.getGroups().size() == 1);
                 new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
             }
-//            List<WebElement> groups = new Select(driver.findElement(By.name("new_group"))).getOptions();
-//            if (groups.size() > 1) {
-//                new Select(driver.findElement(By.name("new_group"))).selectByIndex(1);
-//            }
         } else {
             Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
@@ -111,6 +108,7 @@ public class ContactHelper extends HelperBase {
         String email2 = driver.findElement(By.name("email2")).getAttribute("value");
         String email3 = driver.findElement(By.name("email3")).getAttribute("value");
         String home = driver.findElement(By.name("home")).getAttribute("value");
+        String home2 = driver.findElement(By.name("phone2")).getAttribute("value");
         String mobile = driver.findElement(By.name("mobile")).getAttribute("value");
         String work = driver.findElement(By.name("work")).getAttribute("value");
         driver.navigate().back();
@@ -124,6 +122,7 @@ public class ContactHelper extends HelperBase {
                 .withEmail2(email2)
                 .withEmail3(email3)
                 .withHomePhone(home)
+                .withHomePhone2(home2)
                 .withMobilePhone(mobile)
                 .withWorkPhone(work);
     }

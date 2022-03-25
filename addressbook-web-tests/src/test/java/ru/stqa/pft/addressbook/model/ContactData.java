@@ -42,6 +42,9 @@ public class ContactData {
     @Column(name = "work")
     @Type(type = "text")
     private String work;
+    @Column(name = "phone2")
+    @Type(type = "text")
+    private String home2;
     @Transient
     private String allPhones;
     @Column(name = "email")
@@ -88,6 +91,8 @@ public class ContactData {
     }
 
     public String getHomePhone() { return home; }
+
+    public String getHomePhone2() { return home2; }
 
     public String getWorkPhone() { return work;}
 
@@ -153,6 +158,11 @@ public class ContactData {
 
     public ContactData withWorkPhone(String work) {
         this.work = work;
+        return this;
+    }
+
+    public ContactData withHomePhone2(String work) {
+        this.home2 = home2;
         return this;
     }
 
