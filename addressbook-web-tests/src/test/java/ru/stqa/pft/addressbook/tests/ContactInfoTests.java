@@ -29,7 +29,7 @@ public class ContactInfoTests extends TestBase{
     }
 
     @Test
-    public void testContactEmail(){
+    public void testContactInfo(){
         ContactData contact = app.contact().all().iterator().next();
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
 
