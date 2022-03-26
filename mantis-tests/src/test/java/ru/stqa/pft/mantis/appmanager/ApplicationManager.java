@@ -19,6 +19,7 @@ public class ApplicationManager {
     private RegistrationHelper registrationHelper;
     private FtpHelper ftp;
     private MailHelper mailHelper;
+    private ResetHelper resetHelper;
 
     public ApplicationManager(String browser) {
         this.browser = browser;
@@ -42,6 +43,13 @@ public class ApplicationManager {
 
     public String getProperty(String key) {
         return properties.getProperty(key);
+    }
+
+    public ResetHelper reset() {
+        if (resetHelper == null){
+            resetHelper = new ResetHelper(this);
+        }
+        return resetHelper;
     }
 
     public RegistrationHelper registration() {
