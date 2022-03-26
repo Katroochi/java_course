@@ -60,16 +60,9 @@ public class ResetHelper extends HelperBase{
     public void newPasswordForm(String confirmationLink, String username, String newPassword){
         driver.get(confirmationLink);
         type(By.id("realname"),username);
-        type(By.id("realnpasswordame"),newPassword);
+        type(By.id("password"),newPassword);
         type(By.id("password-confirm"),newPassword);
         click(By.cssSelector("button[type='submit']"));
-    }
-
-    public String findConfirmationLinkRes(List<MailMessage> mailMessages, String email) {
-        MailMessage mailMessage = mailMessages.stream().filter((m) -> m.to.equals(email)).findFirst().get();
-        VerbalExpression regex = VerbalExpression.regex().find("one:").space().tab().find("http://").nonSpace().oneOrMore().build();
-        System.out.println(regex.getText(mailMessage.text));
-        return regex.getText(mailMessage.text);
     }
 
 }

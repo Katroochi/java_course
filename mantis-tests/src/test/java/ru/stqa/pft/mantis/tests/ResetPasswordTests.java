@@ -15,10 +15,10 @@ public class ResetPasswordTests extends TestBase {
 
     private static final int number = (int) (Math.random() * 1000);
 
-    public static String username = String.format("user%s", number);
+    public static String userName = String.format("user%s", number);
     public static String userPass = String.format("password%s", number);
     public static String userNewPass = String.format("newpassword%s", number);
-    public static String userEmail = String.format("email%s@email.email", number);
+    public static String userEmail = "katroochi@gmail.com";
 
     public String adminLogin = "administrator";
     public String adminPassword = "root";
@@ -27,12 +27,12 @@ public class ResetPasswordTests extends TestBase {
     public void startMailServer() throws MessagingException, IOException {
         app.mail().start();
         System.out.println(userEmail);
-        app.registration().start(username, userEmail);
+        app.registration().start(userName, userEmail);
         List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);
-        String confirmationLink = app.registration().findConfirmationLinkReg(mailMessages, userEmail);
+        String confirmationLink = app.registration().findConfirmationLink(mailMessages, userEmail);
 
         app.registration().finish(confirmationLink, userPass);
-        assertTrue(app.newSession().login(username, userPass));
+        assertTrue(app.newSession().login(userName, userPass));
 
         app.reset().logout();
     }
@@ -41,16 +41,16 @@ public class ResetPasswordTests extends TestBase {
     public void testResetPassword() throws IOException, MessagingException {
 
         app.reset().login(adminLogin, adminPassword);
-        String email = app.reset().resetPasswordUser(username);
+        String email = app.reset().resetPasswordUser(userName);
         assertEquals(email, userEmail);
 
-        List<MailMessage> mailMessages = app.mail().waitForMail(3, 30000);
-        String confirmationLink = app.reset().findConfirmationLinkRes(mailMessages, email);
+        List<MailMessage> mailMessages = app.mail().waitForMail(1, 30000);
+        String confirmationLink = app.registration().findConfirmationLink(mailMessages, email);
 
-        app.registration().finish(confirmationLink, userNewPass);
+        app.reset().newPasswordForm(confirmationLink, userName, userNewPass);
 
-        app.reset().login(username, userNewPass);
-        assertTrue(app.newSession().login(username, userNewPass));
+        app.reset().login(userName, userNewPass);
+        assertTrue(app.newSession().login(userName, userNewPass));
     }
 
     @AfterMethod(alwaysRun = true)

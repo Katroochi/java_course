@@ -20,7 +20,7 @@ public class RegistrationHelper extends HelperBase{
         click(By.cssSelector("input[type='submit']"));
     }
 
-    public String findConfirmationLinkReg(List<MailMessage> mailMessages, String email) {
+    public String findConfirmationLink(List<MailMessage> mailMessages, String email) {
         MailMessage mailMessage = mailMessages.stream().filter((m) -> m.to.equals(mailMessages)).findFirst().get();
         VerbalExpression regex = VerbalExpression.regex().find("http://").nonSpace().oneOrMore().build();
         return regex.getText(mailMessage.text);
