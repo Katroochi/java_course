@@ -7,15 +7,20 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.mantis.model.MailMessage;
 
 import javax.mail.MessagingException;
+import javax.xml.rpc.ServiceException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 import java.util.List;
 
 public class RegistrationTests extends TestBase {
 
     @BeforeMethod
-    public void startMailServer(){
+    public void startMailServer() throws MalformedURLException, ServiceException, RemoteException {
+        skipIfNotFixed(0000001);
         app.mail().start();
     }
+
     private static final int number = (int) (Math.random() * 1000);
 
     public static String userName = String.format("user%s", number);
@@ -23,7 +28,7 @@ public class RegistrationTests extends TestBase {
     public static String userEmail = String.format("email%s@email.email", number);;
 
     @Test
-    public void testRegistration() throws MessagingException, IOException {
+    public void testRegistration() throws MessagingException, IOException{
         app.registration().start(userName, userEmail);
         List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);
         String confirmationLink = app.registration().findConfirmationLink(mailMessages, userEmail);
