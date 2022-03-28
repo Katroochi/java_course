@@ -49,11 +49,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public void selectContactById(int id) {
-        driver.findElement(By.cssSelector("input[value = '" + id + "']"));
-    }
-
-    public void clickSelectContactById(int id) {
-        click(By.cssSelector("input[value = '" + id + "']"));
+        driver.findElement(By.cssSelector("input[id = '" + id + "']"));
     }
 
     public void initContactModificationById(int id) {
@@ -80,22 +76,36 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.name("selected[]"));
     }
 
-    public void goToContactGroups(GroupData group){new Select(driver.findElement(By.xpath("//select[@name='group']"))).selectByValue(String.valueOf(group.getId()));}
+    public void selectGroupToRemove(int id) {
+        driver.findElement(By.xpath("//select[@name='group']//option[@value='" + id + "']")).click();
+    }
+
+    public void removeFromGroup(ContactData contact, GroupData group) {
+        selectGroupToRemove(group.getId());
+        selectById(contact.getId());
+        submitRemoveContactFromGroup();
+    }
 
     public void submitRemoveContactFromGroup(){click(By.xpath("//input[@name='remove']"));}
 
-    public void addContactInGroup(ContactData contact, GroupData group) {
-        clickSelectContactById(contact.getId());
-        selectGroupForAdd(group);
-        addToGroup();
+    public void addToGroup(ContactData contact, GroupData group) {
+        selectById(contact.getId());
+        selectGroupToAddition(group.getId());
+        addTo();
     }
 
-    public void selectGroupForAdd(GroupData group) {
-        new Select(driver.findElement(By.xpath("//select[@name='to_group']"))).selectByValue(String.valueOf(group.getId()));
+    public ContactData selectById(int id) {
+        driver.findElement(By.cssSelector("input[id='" + id + "']")).click();
+        return null;
     }
 
-    public void addToGroup() {
-        click(By.xpath("//input[@value='Add to']"));
+    private void addTo() {
+        driver.findElement(By.name("add")).click();
+    }
+
+    private void selectGroupToAddition(int id) {
+        driver.findElement(By.xpath("//select[@name='to_group']//option[@value='" + id + "']")).click();
+
     }
 
     public ContactData infoFromEditForm(ContactData contact) {

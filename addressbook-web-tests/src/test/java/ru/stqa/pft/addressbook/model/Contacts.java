@@ -27,6 +27,28 @@ public class Contacts extends ForwardingSet<ContactData> {
         return delegate;
     }
 
+    public static ContactData getContactWithGroup(Contacts contacts) {
+        ContactData contactWithGroup = null;
+        for (ContactData contact : contacts) {
+            if (contact.getGroups().size() > 0) {
+                contactWithGroup = contact;
+            }
+        }
+        System.out.println(contactWithGroup);
+        return contactWithGroup;
+    }
+
+    public ContactData getInfoOfContact(ContactData contact) {
+        ContactData contactForAddition = null;
+        for (ContactData allContacts : delegate) {
+            if (allContacts.getId() ==contact.getId() ) {
+                contactForAddition = allContacts;
+                break;
+            }
+        }
+        return contactForAddition;
+    }
+
     public Contacts withAdded(ContactData contact){
         Contacts contacts = new Contacts(this);
         contacts.add(contact);
