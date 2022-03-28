@@ -16,17 +16,19 @@ public class RegistrationTests extends TestBase {
     public void startMailServer(){
         app.mail().start();
     }
+    private static final int number = (int) (Math.random() * 1000);
+
+    public static String userName = String.format("user%s", number);
+    public static String userPass = String.format("password%s", number);
+    public static String userEmail = String.format("email%s@email.email", number);;
 
     @Test
     public void testRegistration() throws MessagingException, IOException {
-        String email = "user1@localhost.localdomain";
-        String user = "user";
-        String password = "password";
-        app.registration().start(user, email);
+        app.registration().start(userName, userEmail);
         List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);
-        String confirmationLink = app.registration().findConfirmationLink(mailMessages, email);
-        app.registration().finish(confirmationLink, password);
-        Assert.assertTrue(app.newSession().login(user, password));
+        String confirmationLink = app.registration().findConfirmationLink(mailMessages, userEmail);
+        app.registration().finish(confirmationLink, userName, userPass);
+        Assert.assertTrue(app.newSession().login(userName, userPass));
     }
 
 

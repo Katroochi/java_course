@@ -1,10 +1,6 @@
 package ru.stqa.pft.mantis.appmanager;
 
 import org.openqa.selenium.By;
-import ru.lanwen.verbalregex.VerbalExpression;
-import ru.stqa.pft.mantis.model.MailMessage;
-
-import java.util.List;
 
 public class ResetHelper extends HelperBase{
 
@@ -48,13 +44,6 @@ public class ResetHelper extends HelperBase{
         resetPassword();
         logout();
         return userEmail;
-    }
-
-    public void resetPass(String  username, String email){
-        driver.get(app.getProperty("web.baseUrl") + "/lost_pwd_page.php");
-        type(By.name("username"), username);
-        type(By.name("email"), email);
-        click(By.cssSelector("input[type='submit']"));
     }
 
     public void newPasswordForm(String confirmationLink, String username, String newPassword){

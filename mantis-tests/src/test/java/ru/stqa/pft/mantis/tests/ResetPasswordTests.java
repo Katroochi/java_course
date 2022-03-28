@@ -18,7 +18,7 @@ public class ResetPasswordTests extends TestBase {
     public static String userName = String.format("user%s", number);
     public static String userPass = String.format("password%s", number);
     public static String userNewPass = String.format("newpassword%s", number);
-    public static String userEmail = "katroochi@gmail.com";
+    public static String userEmail = String.format("email%s@email.email", number);;
 
     public String adminLogin = "administrator";
     public String adminPassword = "root";
@@ -31,10 +31,8 @@ public class ResetPasswordTests extends TestBase {
         List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);
         String confirmationLink = app.registration().findConfirmationLink(mailMessages, userEmail);
 
-        app.registration().finish(confirmationLink, userPass);
+        app.registration().finish(confirmationLink, userName, userPass);
         assertTrue(app.newSession().login(userName, userPass));
-
-        app.reset().logout();
     }
 
     @Test
@@ -44,8 +42,8 @@ public class ResetPasswordTests extends TestBase {
         String email = app.reset().resetPasswordUser(userName);
         assertEquals(email, userEmail);
 
-        List<MailMessage> mailMessages = app.mail().waitForMail(1, 30000);
-        String confirmationLink = app.registration().findConfirmationLink(mailMessages, email);
+        List<MailMessage> mailMessages = app.mail().waitForMail(3, 30000);
+        String confirmationLink = app.registration().findConfirmationLinkRS(mailMessages);
 
         app.reset().newPasswordForm(confirmationLink, userName, userNewPass);
 
