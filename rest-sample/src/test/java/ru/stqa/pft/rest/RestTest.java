@@ -22,7 +22,7 @@ import static org.testng.Assert.assertEquals;
 public class RestTest extends TestBase{
     @BeforeMethod
     public void ckeckIssueState() throws IOException {
-        skipIfNotFixed(1959);
+        skipIfNotFixed(1960);
     }
 
     @Test
