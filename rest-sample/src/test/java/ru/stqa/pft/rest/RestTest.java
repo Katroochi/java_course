@@ -17,10 +17,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import static org.testng.Assert.assertEquals;
+
 public class RestTest extends TestBase{
     @BeforeMethod
     public void ckeckIssueState() throws IOException {
-        skipIfNotFixed(1939);
+        skipIfNotFixed(1959);
     }
 
     @Test
@@ -30,7 +32,7 @@ public class RestTest extends TestBase{
         int issueId = createIssue(newIssue);
         Set<Issue> newIssues = getIssues();
         oldIssues.add(newIssue.withId(issueId));
-        Assert.assertEquals(newIssues, oldIssues);
+        assertEquals(newIssues, oldIssues);
     }
 
     private Set<Issue> getIssues() throws IOException {
