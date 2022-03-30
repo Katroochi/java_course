@@ -7,11 +7,14 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -37,10 +40,16 @@ public class ApplicationManager {
 
         dbHelper = new DbHelper();
 
-        if (browser.equals(BrowserType.FIREFOX)){
-            driver = new FirefoxDriver();
-        } else if(browser.equals(BrowserType.CHROME)){
-            driver = new ChromeDriver();
+        if("".equals(properties.getProperty("selenium.server"))) {
+            if (browser.equals(BrowserType.FIREFOX)) {
+                driver = new FirefoxDriver();
+            } else if (browser.equals(BrowserType.CHROME)) {
+                driver = new ChromeDriver();
+            }
+        }else{
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setBrowserName(browser);
+            driver = new RemoteWebDriver(new URL(properties.getProperty("selenium.server")), capabilities);
         }
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
