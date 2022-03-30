@@ -49,6 +49,17 @@ public class Contacts extends ForwardingSet<ContactData> {
         return contactForAddition;
     }
 
+    public ContactData getInfoOfContactByName(ContactData contact) {
+        ContactData contactForAddition = null;
+        for (ContactData allContacts : delegate) {
+            if (allContacts.getFirstname().equals(contact.getFirstname() )) {
+                contactForAddition = allContacts;
+                break;
+            }
+        }
+        return contactForAddition;
+    }
+
     public Contacts withAdded(ContactData contact){
         Contacts contacts = new Contacts(this);
         contacts.add(contact);

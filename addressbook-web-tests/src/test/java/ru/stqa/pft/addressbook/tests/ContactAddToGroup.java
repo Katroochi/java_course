@@ -1,8 +1,12 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.checkerframework.checker.units.qual.C;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.*;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,10 +29,9 @@ public class ContactAddToGroup extends TestBase{
     @Test
     public void testAddContactToGroup() {
         ContactsInGroup before = app.db().groupsWithContact();
-        ContactData contact = selectedContact();
+        ContactData contact = freeContact();
         Groups groupsBefore = contact.getGroups();
-        Groups groups = app.db().groups();
-        GroupData group = groups.iterator().next();
+        GroupData group = freeGroup(contact);
 
         app.goTo().homePage();
         app.contact().addToGroup(contact, group);
@@ -39,15 +42,41 @@ public class ContactAddToGroup extends TestBase{
         assertTrue(contact.getGroups().whithAdded(group).contains(group));
     }
 
-    public ContactData selectedContact() {
+    //ищу контакт, который не добавлен хотябы в одну группу
+    //если такого нет, создаю новый
+    public ContactData freeContact () {
         Contacts contacts = app.db().contacts();
         Groups groups = app.db().groups();
+        ContactData freeContact = null;
         for (ContactData contact : contacts) {
             if (contact.getGroups().size() < groups.size()) {
-                return contact;
+                freeContact = contact;
             }
         }
-        return contacts.iterator().next();
+        if(freeContact == null){
+            int number = (int) (Math.random() * 1000);
+            ContactData newContact = new ContactData().withFirstname("sdfsdf"+number).withLastname("dsfsdfs");
+            app.goTo().homePage();
+            app.contact().create(newContact);
+            int id = app.db().contacts().getInfoOfContactByName(newContact).getId();
+            freeContact = newContact.withId(id);;
+        }
+        return freeContact;
     }
 
+    //беру группы и смотрю есть ли они в контакте
+    //если у контакта нет групп, то беру любую группу
+    public GroupData freeGroup (ContactData contact){
+        Groups groups = app.db().groups();
+        GroupData freeGroup = null;
+        for(GroupData group : groups){
+            if(!contact.getGroups().contains(group)){
+                freeGroup = group;
+            }
+        }
+        if(freeGroup == null){
+            freeGroup = groups.iterator().next();
+        }
+        return freeGroup;
+    }
 }
