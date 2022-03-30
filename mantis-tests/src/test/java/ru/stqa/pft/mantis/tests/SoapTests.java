@@ -40,9 +40,8 @@ public class SoapTests extends TestBase{
     @Test
     public void testCheckState() throws MalformedURLException, ServiceException, RemoteException {
         int issueId = 1;
-            MantisConnectPortType mc = new MantisConnectLocator()
-                    .getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.2/api/soap/mantisconnect.php"));
-            IssueData newIssueData = mc.mc_issue_get("administrator", "root", BigInteger.valueOf(issueId));
+            MantisConnectPortType mc = app.soap().getMantisConnect();
+            IssueData newIssueData = mc.mc_issue_get(app.getProperty("mantis.adminLogin"), app.getProperty("mantis.adminPassword"), BigInteger.valueOf(issueId));
         System.out.println(newIssueData.getStatus().getName());
         }
     }

@@ -27,8 +27,8 @@ public class TestBase {
     }
 
     public boolean isIssueOpen(int issueId) throws MalformedURLException, ServiceException, RemoteException {
-        MantisConnectPortType mc = getMantisConnect();
-        IssueData issue =mc.mc_issue_get(app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword"), BigInteger.valueOf(issueId));
+        MantisConnectPortType mc = app.soap().getMantisConnect();
+        IssueData issue =mc.mc_issue_get(app.getProperty("mantis.adminLogin"), app.getProperty("mantis.adminPassword"), BigInteger.valueOf(issueId));
         ObjectRef status = issue.getStatus();
         return !status.getName().equals("resolved");
     }
@@ -38,12 +38,6 @@ public class TestBase {
             throw new SkipException("Ignored because of issue " + issueId);
         }
     }
-
-    private MantisConnectPortType getMantisConnect() throws ServiceException, MalformedURLException {
-        return new MantisConnectLocator()
-                .getMantisConnectPort(new URL(app.getProperty("mantis.SoapConnectUrl")));
-    }
-
 
     @AfterSuite(alwaysRun = true)
     public void tearDown() throws IOException {
