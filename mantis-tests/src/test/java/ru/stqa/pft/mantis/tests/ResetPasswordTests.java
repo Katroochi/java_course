@@ -18,10 +18,7 @@ public class ResetPasswordTests extends TestBase {
     public static String userName = String.format("user%s", number);
     public static String userPass = String.format("password%s", number);
     public static String userNewPass = String.format("newpassword%s", number);
-    public static String userEmail = String.format("email%s@email.email", number);;
-
-    public String adminLogin = "administrator";
-    public String adminPassword = "root";
+    public static String userEmail = String.format("email%s@email.email", number);
 
     @BeforeMethod
     public void startMailServer() throws MessagingException, IOException {
@@ -37,8 +34,7 @@ public class ResetPasswordTests extends TestBase {
 
     @Test
     public void testResetPassword() throws IOException, MessagingException {
-
-        app.reset().login(adminLogin, adminPassword);
+        app.reset().login(app.getProperty("web.adminLogin"), app.getProperty("web.adminPassword"));
         String email = app.reset().resetPasswordUser(userName);
         assertEquals(email, userEmail);
 
