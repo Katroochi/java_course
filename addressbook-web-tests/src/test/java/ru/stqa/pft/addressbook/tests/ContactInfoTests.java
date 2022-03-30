@@ -24,7 +24,8 @@ public class ContactInfoTests extends TestBase{
                     .withHomePhone2("(22) 23 34 45")
                     .withEmail("test@email.com")
                     .withEmail2("test2@email.com")
-                    .withEmail3("test3@email.com"));
+                    .withEmail3("test3@email.com").withAddress("Saint-Petersburg, str. Morskaia, d.7, lit.A, fl.7")
+                    .withAddressSecondary("12345 Siverskii, 123 Divizii, 4-43"));
         }
     }
 
@@ -35,6 +36,7 @@ public class ContactInfoTests extends TestBase{
 
         assertThat(contact.getAllEmails(), equalTo(mergeEmails(contactInfoFromEditForm)));
         assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
+        assertThat(cleaned(contact.getAddress()), equalTo(cleaned(contactInfoFromEditForm.getAddress())));
     }
 
     private String mergeEmails(ContactData contact) {
@@ -52,11 +54,15 @@ public class ContactInfoTests extends TestBase{
     }
 
     public static String cleanedPhones(String phone){
+
         return phone.replaceAll("\\s","").replaceAll("[-()]","");
     }
 
     public static String cleanedEmails(String email){
         return email.replaceAll("\\s","");
     }
+
+    public static String cleaned(String address){
+        return address.replaceAll("[-().,]","");}
 }
 
