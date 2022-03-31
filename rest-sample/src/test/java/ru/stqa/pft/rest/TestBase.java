@@ -25,7 +25,7 @@ public class TestBase {
         List<Issue> list = new Gson().fromJson(issues, new TypeToken<List<Issue>>(){}.getType());
         String status = list.get(0).getState_name();
 
-        return !status.equals("Resolved");
+        return !status.equals("Closed");
     }
 
     public void skipIfNotFixed(int issueId) throws IOException {
